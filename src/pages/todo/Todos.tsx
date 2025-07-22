@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import TodoModal from '../../components/TodoModal';
+
 import type { Todo, TodoStatus } from '../../types/Todo';
 
 const Todos = () => {
