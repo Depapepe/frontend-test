@@ -83,9 +83,12 @@ const TodoModal = ({
             />
           </div>
           <div className="mb-2 space-y-1">
+            <div className="text-sm font-medium">
+              {checklist.filter((c) => c.done).length}/{checklist.length}
+            </div>
             {checklist.map((item) => {
               return (
-                <div key={item.id} className="flex items-center gap-2">
+                <div key={item.id} className="group flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={item.done}
@@ -128,18 +131,30 @@ const TodoModal = ({
                       {item.text || "새 항목"}
                     </span>
                   )}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setChecklist((prev) => prev.filter((ci) => ci.id !== item.id))
+                    }
+                    className="ml-auto invisible text-gray-500 hover:text-red-500 group-hover:visible"
+                    aria-label="delete checklist item"
+                  >
+                    <Cross2Icon />
+                  </button>
                 </div>
               );
             })}
             <button
               type="button"
               onClick={() =>
-                setChecklist((prev) => [
-                  ...prev,
-                  { id: Date.now(), text: "", done: false },
-                ])
+                setChecklist((prev) =>
+                  prev.length < 10
+                    ? [...prev, { id: Date.now(), text: "", done: false }]
+                    : prev,
+                )
               }
-              className="rounded bg-gray-200 px-2 py-1 text-sm hover:bg-gray-300"
+              disabled={checklist.length >= 10}
+              className="rounded bg-gray-200 px-2 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
             >
               +
             </button>
