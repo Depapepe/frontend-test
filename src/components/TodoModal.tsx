@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Dialog } from 'radix-ui';
 import type { TodoStatus } from '../types/Todo';
+
+interface TodoModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onSave: (data: {
     title: string;
     detail: string;
