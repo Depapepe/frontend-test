@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Pencil1Icon, PlusIcon } from '@radix-ui/react-icons';
-import TodoModal from '../../components/TodoModal';
+import { useState } from "react";
+import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
+import TodoModal from "../../components/TodoModal";
 
-import type { Todo, TodoStatus } from '../../types/Todo';
+import type { Todo, TodoStatus, ChecklistItem } from "../../types/Todo";
 
 const Todos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -14,15 +14,21 @@ const Todos = () => {
     setOpen(true);
   };
 
-  const handleSave = (data: { title: string; detail: string; dueDate: string; status: TodoStatus }) => {
+  const handleSave = (data: {
+    title: string;
+    detail: string;
+    dueDate: string;
+    status: TodoStatus;
+    checklist: ChecklistItem[];
+  }) => {
     if (editing) {
-      setTodos(todos.map(t => (t.id === editing.id ? { ...t, ...data } : t)));
+      setTodos(todos.map((t) => (t.id === editing.id ? { ...t, ...data } : t)));
     } else {
       setTodos([
         ...todos,
         {
           id: Date.now(),
-          createdAt: new Date().toISOString().split('T')[0],
+          createdAt: new Date().toISOString().split("T")[0],
           ...data,
         },
       ]);
@@ -32,7 +38,7 @@ const Todos = () => {
   };
 
   const handleDelete = (id: number) => {
-    setTodos(todos.filter(t => t.id !== id));
+    setTodos(todos.filter((t) => t.id !== id));
   };
 
   const handleEdit = (todo: Todo) => {
@@ -53,7 +59,7 @@ const Todos = () => {
         </button>
       </div>
       <ul className="space-y-2">
-        {todos.map(todo => (
+        {todos.map((todo) => (
           <li key={todo.id} className="flex flex-col gap-1 rounded border p-2">
             <div className="flex justify-between">
               <span className="font-semibold">{todo.title}</span>
@@ -72,7 +78,10 @@ const Todos = () => {
               >
                 <Pencil1Icon />
               </button>
-              <button onClick={() => handleDelete(todo.id)} className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600">
+              <button
+                onClick={() => handleDelete(todo.id)}
+                className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
+              >
                 삭제
               </button>
             </div>
@@ -81,7 +90,7 @@ const Todos = () => {
       </ul>
       <TodoModal
         open={open}
-        onOpenChange={o => {
+        onOpenChange={(o) => {
           setOpen(o);
           if (!o) setEditing(null);
         }}
