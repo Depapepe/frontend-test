@@ -1,4 +1,10 @@
-export type TodoStatus = 'TODO' | 'PROGRESS' | 'DONE';
+export type TodoStatus = "TODO" | "PROGRESS" | "DONE";
+
+export interface ChecklistItem {
+  id: number;
+  text: string;
+  done: boolean;
+}
 
 export interface Todo {
   id: number;
@@ -7,4 +13,5 @@ export interface Todo {
   dueDate: string;
   createdAt: string;
   status: TodoStatus;
+  checklist: ChecklistItem[];
 }
