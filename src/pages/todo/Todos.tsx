@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import TodoModal from '../../components/TodoModal';
-
-interface Todo {
-  id: number;
-  text: string;
-}
+import type { Todo, TodoStatus } from '../../types/Todo';
 
 const Todos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,11 +12,18 @@ const Todos = () => {
     setOpen(true);
   };
 
-  const handleSave = (text: string) => {
+  const handleSave = (data: { title: string; detail: string; dueDate: string; status: TodoStatus }) => {
     if (editing) {
-      setTodos(todos.map(t => (t.id === editing.id ? { ...t, text } : t)));
+      setTodos(todos.map(t => (t.id === editing.id ? { ...t, ...data } : t)));
     } else {
-      setTodos([...todos, { id: Date.now(), text }]);
+      setTodos([
+        ...todos,
+        {
+          id: Date.now(),
+          createdAt: new Date().toISOString().split('T')[0],
+          ...data,
+        },
+      ]);
     }
     setOpen(false);
     setEditing(null);
@@ -39,28 +42,27 @@ const Todos = () => {
     <div className="mx-auto max-w-md p-4">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Todo List</h1>
-        <button
-          onClick={handleAddClick}
-          className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
-        >
+        <button onClick={handleAddClick} className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600">
           +
         </button>
       </div>
       <ul className="space-y-2">
         {todos.map(todo => (
-          <li key={todo.id} className="flex items-center justify-between rounded border p-2">
-            <span>{todo.text}</span>
-            <div className="space-x-2">
-              <button
-                onClick={() => handleEdit(todo)}
-                className="rounded bg-green-500 px-2 py-1 text-white hover:bg-green-600"
-              >
+          <li key={todo.id} className="flex flex-col gap-1 rounded border p-2">
+            <div className="flex justify-between">
+              <span className="font-semibold">{todo.title}</span>
+              <span className="text-sm text-gray-500">{todo.status}</span>
+            </div>
+            <p className="text-sm text-gray-700">{todo.detail}</p>
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>Due: {todo.dueDate}</span>
+              <span>Created: {todo.createdAt}</span>
+            </div>
+            <div className="mt-1 flex justify-end gap-2">
+              <button onClick={() => handleEdit(todo)} className="rounded bg-green-500 px-2 py-1 text-white hover:bg-green-600">
                 수정
               </button>
-              <button
-                onClick={() => handleDelete(todo.id)}
-                className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
-              >
+              <button onClick={() => handleDelete(todo.id)} className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600">
                 삭제
               </button>
             </div>
@@ -74,7 +76,7 @@ const Todos = () => {
           if (!o) setEditing(null);
         }}
         onSave={handleSave}
-        initialText={editing?.text}
+        initialTodo={editing ?? undefined}
       />
     </div>
   );
