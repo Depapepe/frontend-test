@@ -1,12 +1,19 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router';
+import MobileLayout from '../../components/MobileLayout';
 
 const Home = () => {
   const navigate = useNavigate();
   return (
-    <>
-      <div>HOME</div>
-      <div onClick={() => navigate("/todos")}>move todo</div>
-    </>
+    <MobileLayout title="Home">
+      <div className="flex h-full items-center justify-center p-4">
+        <button
+          onClick={() => navigate('/todos')}
+          className="rounded bg-blue-500 px-4 py-2 text-white"
+        >
+          Todo List
+        </button>
+      </div>
+    </MobileLayout>
   );
 };
 

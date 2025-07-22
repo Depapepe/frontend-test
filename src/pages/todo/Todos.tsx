@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
-import TodoModal from "../../components/TodoModal";
+import { useState } from 'react';
+import { Pencil1Icon, PlusIcon } from '@radix-ui/react-icons';
+import TodoModal from '../../components/TodoModal';
+import MobileLayout from '../../components/MobileLayout';
 
-import type { Todo, TodoStatus, ChecklistItem } from "../../types/Todo";
+import type { Todo, TodoStatus, ChecklistItem } from '../../types/Todo';
 
 const Todos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -22,13 +23,13 @@ const Todos = () => {
     checklist: ChecklistItem[];
   }) => {
     if (editing) {
-      setTodos(todos.map((t) => (t.id === editing.id ? { ...t, ...data } : t)));
+      setTodos(todos.map(t => (t.id === editing.id ? { ...t, ...data } : t)));
     } else {
       setTodos([
         ...todos,
         {
           id: Date.now(),
-          createdAt: new Date().toISOString().split("T")[0],
+          createdAt: new Date().toISOString().split('T')[0],
           ...data,
         },
       ]);
@@ -38,7 +39,7 @@ const Todos = () => {
   };
 
   const handleDelete = (id: number) => {
-    setTodos(todos.filter((t) => t.id !== id));
+    setTodos(todos.filter(t => t.id !== id));
   };
 
   const handleEdit = (todo: Todo) => {
@@ -47,7 +48,7 @@ const Todos = () => {
   };
 
   return (
-    <div className="mx-auto max-w-md p-4">
+    <MobileLayout title="Todo List">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Todo List</h1>
         <button
@@ -59,7 +60,7 @@ const Todos = () => {
         </button>
       </div>
       <ul className="space-y-2">
-        {todos.map((todo) => (
+        {todos.map(todo => (
           <li key={todo.id} className="flex flex-col gap-1 rounded border p-2">
             <div className="flex justify-between">
               <span className="font-semibold">{todo.title}</span>
@@ -90,14 +91,14 @@ const Todos = () => {
       </ul>
       <TodoModal
         open={open}
-        onOpenChange={(o) => {
+        onOpenChange={o => {
           setOpen(o);
           if (!o) setEditing(null);
         }}
         onSave={handleSave}
         initialTodo={editing ?? undefined}
       />
-    </div>
+    </MobileLayout>
   );
 };
 
