@@ -43,7 +43,7 @@ export default tseslint.config([
         },
         pathGroupsExcludedImportTypes: ['builtin'],
       }],
-      'dependencyArrays/sort':'error'
+      'dependencies/sort': 'error'
     }
   },
 ])

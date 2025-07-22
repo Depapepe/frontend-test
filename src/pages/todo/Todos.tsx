@@ -1,5 +1,85 @@
+import { useState } from 'react';
+import TodoModal from '../../components/TodoModal';
+import type { Todo, TodoStatus } from '../../types/Todo';
+
 const Todos = () => {
-  return <div>TODOS</div>;
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<Todo | null>(null);
+
+  const handleAddClick = () => {
+    setEditing(null);
+    setOpen(true);
+  };
+
+  const handleSave = (data: { title: string; detail: string; dueDate: string; status: TodoStatus }) => {
+    if (editing) {
+      setTodos(todos.map(t => (t.id === editing.id ? { ...t, ...data } : t)));
+    } else {
+      setTodos([
+        ...todos,
+        {
+          id: Date.now(),
+          createdAt: new Date().toISOString().split('T')[0],
+          ...data,
+        },
+      ]);
+    }
+    setOpen(false);
+    setEditing(null);
+  };
+
+  const handleDelete = (id: number) => {
+    setTodos(todos.filter(t => t.id !== id));
+  };
+
+  const handleEdit = (todo: Todo) => {
+    setEditing(todo);
+    setOpen(true);
+  };
+
+  return (
+    <div className="mx-auto max-w-md p-4">
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Todo List</h1>
+        <button onClick={handleAddClick} className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600">
+          +
+        </button>
+      </div>
+      <ul className="space-y-2">
+        {todos.map(todo => (
+          <li key={todo.id} className="flex flex-col gap-1 rounded border p-2">
+            <div className="flex justify-between">
+              <span className="font-semibold">{todo.title}</span>
+              <span className="text-sm text-gray-500">{todo.status}</span>
+            </div>
+            <p className="text-sm text-gray-700">{todo.detail}</p>
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>Due: {todo.dueDate}</span>
+              <span>Created: {todo.createdAt}</span>
+            </div>
+            <div className="mt-1 flex justify-end gap-2">
+              <button onClick={() => handleEdit(todo)} className="rounded bg-green-500 px-2 py-1 text-white hover:bg-green-600">
+                수정
+              </button>
+              <button onClick={() => handleDelete(todo.id)} className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600">
+                삭제
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <TodoModal
+        open={open}
+        onOpenChange={o => {
+          setOpen(o);
+          if (!o) setEditing(null);
+        }}
+        onSave={handleSave}
+        initialTodo={editing ?? undefined}
+      />
+    </div>
+  );
 };
 
 export default Todos;
