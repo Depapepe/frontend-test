@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import { Dialog } from 'radix-ui';
 import type { TodoStatus } from '../types/Todo';
 
@@ -80,9 +81,10 @@ const TodoModal = ({ open, onOpenChange, onSave, initialTodo }: TodoModalProps) 
           <div className="flex justify-end gap-2">
             <button
               onClick={() => onOpenChange(false)}
-              className="rounded bg-gray-200 px-3 py-1 hover:bg-gray-300"
+              className="rounded bg-gray-200 p-2 hover:bg-gray-300"
+              aria-label="cancel"
             >
-              취소
+              <Cross2Icon />
             </button>
             <button
               onClick={handleSave}
