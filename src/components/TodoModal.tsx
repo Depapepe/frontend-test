@@ -40,13 +40,15 @@ const TodoModal = ({
   const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {
-    setTitle(initialTodo?.title ?? "");
-    setDetail(initialTodo?.detail ?? "");
-    setDueDate(initialTodo?.dueDate ?? "");
-    setStatus(initialTodo?.status ?? "TODO");
-    setChecklist(initialTodo?.checklist ?? []);
-    setEditingId(null);
-  }, [initialTodo]);
+    if (open) {
+      setTitle(initialTodo?.title ?? "");
+      setDetail(initialTodo?.detail ?? "");
+      setDueDate(initialTodo?.dueDate ?? "");
+      setStatus(initialTodo?.status ?? "TODO");
+      setChecklist(initialTodo?.checklist ?? []);
+      setEditingId(null);
+    }
+  }, [initialTodo, open]);
 
   const handleSave = () => {
     if (title.trim()) {
