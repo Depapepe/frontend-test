@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Pencil1Icon, PlusIcon } from '@radix-ui/react-icons';
 import TodoModal from '../../components/TodoModal';
-import MobileLayout from '../../components/MobileLayout';
 
 import type { Todo, TodoStatus, ChecklistItem } from '../../types/Todo';
 
@@ -48,7 +47,7 @@ const Todos = () => {
   };
 
   return (
-    <MobileLayout title="Todo List">
+    <>
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Todo List</h1>
         <button
@@ -98,7 +97,7 @@ const Todos = () => {
         onSave={handleSave}
         initialTodo={editing ?? undefined}
       />
-    </MobileLayout>
+    </>
   );
 };
 
