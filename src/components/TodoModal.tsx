@@ -32,10 +32,10 @@ const TodoModal = ({
   const [detail, setDetail] = useState(initialTodo?.detail ?? "");
   const [dueDate, setDueDate] = useState(initialTodo?.dueDate ?? "");
   const [status, setStatus] = useState<TodoStatus>(
-    initialTodo?.status ?? "TODO",
+    initialTodo?.status ?? "TODO"
   );
   const [checklist, setChecklist] = useState<ChecklistItem[]>(
-    initialTodo?.checklist ?? [],
+    initialTodo?.checklist ?? []
   );
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -65,7 +65,7 @@ const TodoModal = ({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/40" />
+        <Dialog.Overlay className="fixed inset-0 bg-black/60" />
         <Dialog.Content className="fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 rounded bg-white p-4 shadow">
           <Dialog.Title className="mb-2 text-lg font-bold">Todo</Dialog.Title>
           <div className="mb-2">
@@ -80,7 +80,7 @@ const TodoModal = ({
             <textarea
               value={detail}
               onChange={(e) => setDetail(e.target.value)}
-              className="w-full rounded border p-2"
+              className="w-full rounded border p-2 text-sm"
               placeholder="Detail"
             />
           </div>
@@ -99,8 +99,8 @@ const TodoModal = ({
                         prev.map((ci) =>
                           ci.id === item.id
                             ? { ...ci, done: e.target.checked }
-                            : ci,
-                        ),
+                            : ci
+                        )
                       )
                     }
                   />
@@ -113,8 +113,8 @@ const TodoModal = ({
                           prev.map((ci) =>
                             ci.id === item.id
                               ? { ...ci, text: e.target.value }
-                              : ci,
-                          ),
+                              : ci
+                          )
                         )
                       }
                       onBlur={() => setEditingId(null)}
@@ -141,7 +141,9 @@ const TodoModal = ({
                   <button
                     type="button"
                     onClick={() =>
-                      setChecklist((prev) => prev.filter((ci) => ci.id !== item.id))
+                      setChecklist((prev) =>
+                        prev.filter((ci) => ci.id !== item.id)
+                      )
                     }
                     className="ml-auto invisible text-gray-500 hover:text-red-500 group-hover:visible"
                     aria-label="delete checklist item"
@@ -157,7 +159,7 @@ const TodoModal = ({
                 setChecklist((prev) =>
                   prev.length < 10
                     ? [...prev, { id: Date.now(), text: "", done: false }]
-                    : prev,
+                    : prev
                 )
               }
               disabled={checklist.length >= 10}
@@ -183,19 +185,19 @@ const TodoModal = ({
               <option value="DONE">DONE</option>
             </select>
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 mt-4">
             <button
               onClick={() => onOpenChange(false)}
-              className="rounded bg-gray-200 p-2 hover:bg-gray-300"
+              className="rounded bg-gray-200 p-2 hover:bg-gray-300 text-sm"
               aria-label="cancel"
             >
-              <Cross2Icon />
+              Cancel
             </button>
             <button
               onClick={handleSave}
-              className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
+              className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600 text-sm"
             >
-              저장
+              Save
             </button>
           </div>
         </Dialog.Content>
