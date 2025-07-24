@@ -66,7 +66,7 @@ const TodoModal = ({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 rounded bg-white p-4 shadow">
+        <Dialog.Content className="fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 rounded-md bg-background p-4 shadow">
           <Dialog.Title className="mb-2 text-lg font-bold">Todo</Dialog.Title>
           <div className="mb-2">
             <input
@@ -132,7 +132,7 @@ const TodoModal = ({
                         setEditingId(item.id);
                       }}
                       className={`flex-1 touch-manipulation ${
-                        item.done ? "line-through text-gray-500" : ""
+                        item.done ? "line-through text-muted-foreground" : ""
                       }`}
                     >
                       {item.text || "새 항목"}
@@ -143,7 +143,7 @@ const TodoModal = ({
                     onClick={() =>
                       setChecklist((prev) => prev.filter((ci) => ci.id !== item.id))
                     }
-                    className="ml-auto invisible text-gray-500 hover:text-red-500 group-hover:visible"
+                    className="ml-auto invisible text-muted-foreground hover:text-destructive group-hover:visible"
                     aria-label="delete checklist item"
                   >
                     <Cross2Icon />
@@ -161,7 +161,7 @@ const TodoModal = ({
                 )
               }
               disabled={checklist.length >= 10}
-              className="rounded bg-gray-200 px-2 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+              className="rounded bg-secondary px-2 py-1 text-sm text-secondary-foreground hover:bg-secondary/80 disabled:opacity-50"
             >
               +
             </button>
@@ -186,14 +186,14 @@ const TodoModal = ({
           <div className="flex justify-end gap-2">
             <button
               onClick={() => onOpenChange(false)}
-              className="rounded bg-gray-200 p-2 hover:bg-gray-300"
+              className="rounded bg-secondary p-2 text-secondary-foreground hover:bg-secondary/80"
               aria-label="cancel"
             >
               <Cross2Icon />
             </button>
             <button
               onClick={handleSave}
-              className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
+              className="rounded bg-primary px-3 py-1 text-primary-foreground hover:bg-primary/90"
             >
               저장
             </button>

@@ -68,7 +68,7 @@ const Todos = () => {
         <h1 className="text-2xl font-bold">Todo List</h1>
         <button
           onClick={handleAddClick}
-          className="rounded bg-blue-500 p-2 text-white hover:bg-blue-600"
+          className="rounded bg-primary p-2 text-primary-foreground hover:bg-primary/90"
           aria-label="add todo"
         >
           <PlusIcon />
@@ -79,24 +79,24 @@ const Todos = () => {
           <li key={todo.id} className="flex flex-col gap-1 rounded border p-2">
             <div className="flex justify-between">
               <span className="font-semibold">{todo.title}</span>
-              <span className="text-sm text-gray-500">{todo.status}</span>
+              <span className="text-sm text-muted-foreground">{todo.status}</span>
             </div>
-            <p className="text-sm text-gray-700">{todo.detail}</p>
-            <div className="flex justify-between text-xs text-gray-500">
+            <p className="text-sm text-muted-foreground">{todo.detail}</p>
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>Due: {todo.dueDate}</span>
               <span>Created: {todo.createdAt}</span>
             </div>
             <div className="mt-1 flex justify-end gap-2">
               <button
                 onClick={() => handleEdit(todo)}
-                className="rounded bg-green-500 p-2 text-white hover:bg-green-600"
+                className="rounded bg-secondary p-2 text-secondary-foreground hover:bg-secondary/80"
                 aria-label="edit todo"
               >
                 <Pencil1Icon />
               </button>
               <button
                 onClick={() => handleDelete(todo.id)}
-                className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
+                className="rounded bg-destructive px-2 py-1 text-destructive-foreground hover:bg-destructive/90"
               >
                 삭제
               </button>
