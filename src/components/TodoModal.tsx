@@ -127,8 +127,13 @@ const TodoModal = ({
                     />
                   ) : (
                     <span
-                      onDoubleClick={() => setEditingId(item.id)}
-                      className={`flex-1 ${item.done ? "line-through text-gray-500" : ""}`}
+                      onDoubleClick={(e) => {
+                        e.preventDefault();
+                        setEditingId(item.id);
+                      }}
+                      className={`flex-1 touch-manipulation ${
+                        item.done ? "line-through text-gray-500" : ""
+                      }`}
                     >
                       {item.text || "새 항목"}
                     </span>
