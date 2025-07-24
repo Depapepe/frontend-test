@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Pencil1Icon, PlusIcon } from '@radix-ui/react-icons';
 import TodoModal from '../../components/TodoModal';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
 
 import type { Todo, TodoStatus, ChecklistItem } from '../../types/Todo';
 
@@ -66,20 +68,18 @@ const Todos = () => {
     <>
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Todo List</h1>
-        <button
-          onClick={handleAddClick}
-          className="rounded bg-primary p-2 text-primary-foreground hover:bg-primary/90"
-          aria-label="add todo"
-        >
+        <Button onClick={handleAddClick} className="p-2" aria-label="add todo">
           <PlusIcon />
-        </button>
+        </Button>
       </div>
       <ul className="space-y-2">
         {todos.map(todo => (
-          <li key={todo.id} className="flex flex-col gap-1 rounded border p-2">
+          <li key={todo.id} className="flex flex-col gap-1 rounded-lg border bg-card p-4 text-card-foreground">
             <div className="flex justify-between">
               <span className="font-semibold">{todo.title}</span>
-              <span className="text-sm text-muted-foreground">{todo.status}</span>
+              <Badge variant={todo.status === 'PROGRESS' ? 'default' : todo.status === 'DONE' ? 'outline' : 'secondary'}>
+                {todo.status}
+              </Badge>
             </div>
             <p className="text-sm text-muted-foreground">{todo.detail}</p>
             <div className="flex justify-between text-xs text-muted-foreground">
@@ -87,19 +87,12 @@ const Todos = () => {
               <span>Created: {todo.createdAt}</span>
             </div>
             <div className="mt-1 flex justify-end gap-2">
-              <button
-                onClick={() => handleEdit(todo)}
-                className="rounded bg-secondary p-2 text-secondary-foreground hover:bg-secondary/80"
-                aria-label="edit todo"
-              >
+              <Button variant="secondary" onClick={() => handleEdit(todo)} className="p-2" aria-label="edit todo">
                 <Pencil1Icon />
-              </button>
-              <button
-                onClick={() => handleDelete(todo.id)}
-                className="rounded bg-destructive px-2 py-1 text-destructive-foreground hover:bg-destructive/90"
-              >
+              </Button>
+              <Button variant="destructive" onClick={() => handleDelete(todo.id)} className="px-2 py-1">
                 삭제
-              </button>
+              </Button>
             </div>
           </li>
         ))}
