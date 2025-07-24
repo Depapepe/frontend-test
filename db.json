@@ -15,11 +15,17 @@
       ]
     },
     {
-      "title": "1",
-      "detail": "",
-      "dueDate": "",
-      "status": "TODO",
-      "checklist": [],
+      "title": "Second Todo",
+      "detail": "Prepare front end test",
+      "dueDate": "2025-07-24",
+      "status": "PROGRESS",
+      "checklist": [
+        {
+          "id": 1753397777407,
+          "text": "샘플 테스트 만들기",
+          "done": false
+        }
+      ],
       "id": 2
     }
   ]

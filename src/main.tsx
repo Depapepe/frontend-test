@@ -7,7 +7,7 @@ import {
   Route,
 } from "react-router";
 import "./index.css";
-import MobileLayout from "./components/MobileLayout";
+import MobileLayout from "./layout/MobileLayout";
 import Home from "./pages/home/Home";
 import Todos from "./pages/todo/Todos";
 

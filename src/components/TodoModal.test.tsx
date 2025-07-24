@@ -16,10 +16,16 @@ describe("TodoModal", () => {
         onSave={onSaveMock}
         initialTodo={{
           title: "Test Todo",
-          detail: "",
-          dueDate: "",
+          detail: "Test Detail",
+          dueDate: "2025-12-31",
           status: "TODO",
-          checklist: [],
+          checklist: [
+            {
+              id: 1,
+              text: "Item 1",
+              done: false,
+            },
+          ],
         }}
       />
     );
@@ -28,6 +34,7 @@ describe("TodoModal", () => {
     expect(screen.getByText("Todo")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Title")).toBeInTheDocument();
     expect(screen.getByText("Save")).toBeInTheDocument();
+    expect(screen.getByText("Cancel")).toBeInTheDocument();
   });
 
   it("renders correctly when open with test-id", () => {
@@ -43,7 +50,7 @@ describe("TodoModal", () => {
         onSave={onSaveMock}
         initialTodo={{
           title: "Test Todo",
-          detail: "",
+          detail: "Test Detail",
           dueDate: "2025-12-31",
           status: "TODO",
           checklist: [
