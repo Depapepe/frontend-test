@@ -65,11 +65,24 @@ const TodoModal = ({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/60" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 rounded bg-white p-4 shadow">
-          <Dialog.Title className="mb-2 text-lg font-bold">Todo</Dialog.Title>
+        <Dialog.Overlay
+          className="fixed inset-0 bg-black/60"
+          data-testid="todo-modal-overlay"
+          onClick={() => onOpenChange(false)}
+        />
+        <Dialog.Content
+          className="fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 rounded bg-white p-4 shadow"
+          data-testid="todo-modal"
+        >
+          <Dialog.Title
+            className="mb-2 text-lg font-bold"
+            data-testid="todo-modal-title"
+          >
+            Todo
+          </Dialog.Title>
           <div className="mb-2">
             <input
+              data-testid="todo-title-input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full rounded border p-2"
@@ -78,6 +91,7 @@ const TodoModal = ({
           </div>
           <div className="mb-2">
             <textarea
+              data-testid="todo-detail-input"
               value={detail}
               onChange={(e) => setDetail(e.target.value)}
               className="w-full rounded border p-2 text-sm"
@@ -90,10 +104,15 @@ const TodoModal = ({
             </div>
             {checklist.map((item) => {
               return (
-                <div key={item.id} className="group flex items-center gap-2">
+                <div
+                  key={item.id}
+                  className="group flex items-center gap-2"
+                  data-testid={`todo-checklist-item-${item.id}`}
+                >
                   <input
                     type="checkbox"
                     checked={item.done}
+                    data-testid={`todo-checklist-checkbox-${item.id}`}
                     onChange={(e) =>
                       setChecklist((prev) =>
                         prev.map((ci) =>
@@ -108,6 +127,7 @@ const TodoModal = ({
                     <input
                       autoFocus
                       value={item.text}
+                      data-testid={`todo-checklist-input-${item.id}`}
                       onChange={(e) =>
                         setChecklist((prev) =>
                           prev.map((ci) =>
@@ -127,10 +147,11 @@ const TodoModal = ({
                     />
                   ) : (
                     <span
-                      onDoubleClick={(e) => {
+                      onClick={(e) => {
                         e.preventDefault();
                         setEditingId(item.id);
                       }}
+                      data-testid={`todo-checklist-text-${item.id}`}
                       className={`flex-1 touch-manipulation ${
                         item.done ? "line-through text-gray-500" : ""
                       }`}
@@ -145,7 +166,7 @@ const TodoModal = ({
                         prev.filter((ci) => ci.id !== item.id)
                       )
                     }
-                    className="ml-auto invisible text-gray-500 hover:text-red-500 group-hover:visible"
+                    className="ml-auto md:invisible text-gray-500 hover:text-red-500 group-hover:visible"
                     aria-label="delete checklist item"
                   >
                     <Cross2Icon />
@@ -188,6 +209,7 @@ const TodoModal = ({
           <div className="flex justify-end gap-2 mt-4">
             <button
               onClick={() => onOpenChange(false)}
+              data-testid="todo-cancel-button"
               className="rounded bg-gray-200 p-2 hover:bg-gray-300 text-sm"
               aria-label="cancel"
             >
@@ -195,6 +217,7 @@ const TodoModal = ({
             </button>
             <button
               onClick={handleSave}
+              data-testid="todo-save-button"
               className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600 text-sm"
             >
               Save
