@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { Dialog } from "radix-ui";
-import type { ChecklistItem, TodoStatus } from "../types/Todo";
+import { useEffect, useState } from 'react';
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { Dialog } from 'radix-ui';
+import type { ChecklistItem, TodoStatus } from '../types/Todo';
+import { Input } from './ui/Input';
+import { Textarea } from './ui/Textarea';
+import { Select } from './ui/Select';
+import { Button } from './ui/Button';
 
 interface TodoModalProps {
   open: boolean;
@@ -65,24 +69,14 @@ const TodoModal = ({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/40" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 rounded-md bg-background p-4 shadow">
+        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+        <Dialog.Content className="fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-background p-4 shadow-2xl">
           <Dialog.Title className="mb-2 text-lg font-bold">Todo</Dialog.Title>
           <div className="mb-2">
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded border p-2"
-              placeholder="Title"
-            />
+            <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" />
           </div>
           <div className="mb-2">
-            <textarea
-              value={detail}
-              onChange={(e) => setDetail(e.target.value)}
-              className="w-full rounded border p-2"
-              placeholder="Detail"
-            />
+            <Textarea value={detail} onChange={e => setDetail(e.target.value)} placeholder="Detail" />
           </div>
           <div className="mb-2 space-y-1">
             <div className="text-sm font-medium">
@@ -105,25 +99,23 @@ const TodoModal = ({
                     }
                   />
                   {editingId === item.id ? (
-                    <input
+                    <Input
                       autoFocus
                       value={item.text}
-                      onChange={(e) =>
-                        setChecklist((prev) =>
-                          prev.map((ci) =>
-                            ci.id === item.id
-                              ? { ...ci, text: e.target.value }
-                              : ci,
+                      onChange={e =>
+                        setChecklist(prev =>
+                          prev.map(ci =>
+                            ci.id === item.id ? { ...ci, text: e.target.value } : ci,
                           ),
                         )
                       }
                       onBlur={() => setEditingId(null)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
                           setEditingId(null);
                         }
                       }}
-                      className="flex-1 rounded border p-1"
+                      className="flex-1 p-1"
                     />
                   ) : (
                     <span
@@ -151,52 +143,51 @@ const TodoModal = ({
                 </div>
               );
             })}
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={() =>
-                setChecklist((prev) =>
+                setChecklist(prev =>
                   prev.length < 10
-                    ? [...prev, { id: Date.now(), text: "", done: false }]
+                    ? [...prev, { id: Date.now(), text: '', done: false }]
                     : prev,
                 )
               }
               disabled={checklist.length >= 10}
-              className="rounded bg-secondary px-2 py-1 text-sm text-secondary-foreground hover:bg-secondary/80 disabled:opacity-50"
+              className="px-2 py-1 text-sm"
             >
               +
-            </button>
+            </Button>
           </div>
           <div className="mb-2 flex gap-2">
-            <input
+            <Input
               type="date"
               value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="flex-1 rounded border p-2"
+              onChange={e => setDueDate(e.target.value)}
+              className="flex-1"
             />
-            <select
+            <Select
               value={status}
-              onChange={(e) => setStatus(e.target.value as TodoStatus)}
-              className="flex-1 rounded border p-2"
+              onChange={e => setStatus(e.target.value as TodoStatus)}
+              className="flex-1"
             >
               <option value="TODO">TODO</option>
               <option value="PROGRESS">PROGRESS</option>
               <option value="DONE">DONE</option>
-            </select>
+            </Select>
           </div>
           <div className="flex justify-end gap-2">
-            <button
+            <Button
+              variant="secondary"
               onClick={() => onOpenChange(false)}
-              className="rounded bg-secondary p-2 text-secondary-foreground hover:bg-secondary/80"
+              className="p-2"
               aria-label="cancel"
             >
               <Cross2Icon />
-            </button>
-            <button
-              onClick={handleSave}
-              className="rounded bg-primary px-3 py-1 text-primary-foreground hover:bg-primary/90"
-            >
+            </Button>
+            <Button onClick={handleSave} className="px-3 py-1">
               저장
-            </button>
+            </Button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
