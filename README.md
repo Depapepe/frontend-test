@@ -67,3 +67,13 @@ export default tseslint.config([
   },
 ])
 ```
+
+## Mock Server
+
+This project includes a simple [json-server](https://github.com/typicode/json-server) setup for mocking the todo API. Run it with:
+
+```bash
+pnpm run mock-server
+```
+
+The server watches `db.json` and listens on `http://localhost:3000`.

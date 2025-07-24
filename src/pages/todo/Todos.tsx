@@ -1,20 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pencil1Icon, PlusIcon } from '@radix-ui/react-icons';
 import TodoModal from '../../components/TodoModal';
 
 import type { Todo, TodoStatus, ChecklistItem } from '../../types/Todo';
+
+const API_URL = 'http://localhost:3000';
 
 const Todos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Todo | null>(null);
 
+  useEffect(() => {
+    fetch(`${API_URL}/todos`).then(res => res.json()).then(setTodos);
+  }, []);
+
   const handleAddClick = () => {
     setEditing(null);
     setOpen(true);
   };
 
-  const handleSave = (data: {
+  const handleSave = async (data: {
     title: string;
     detail: string;
     dueDate: string;
@@ -22,22 +28,32 @@ const Todos = () => {
     checklist: ChecklistItem[];
   }) => {
     if (editing) {
-      setTodos(todos.map(t => (t.id === editing.id ? { ...t, ...data } : t)));
+      const res = await fetch(`${API_URL}/todos/${editing.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...editing, ...data }),
+      });
+      const updated = await res.json();
+      setTodos(todos.map(t => (t.id === updated.id ? updated : t)));
     } else {
-      setTodos([
-        ...todos,
-        {
-          id: Date.now(),
-          createdAt: new Date().toISOString().split('T')[0],
-          ...data,
-        },
-      ]);
+      const newTodo = {
+        createdAt: new Date().toISOString().split('T')[0],
+        ...data,
+      };
+      const res = await fetch(`${API_URL}/todos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTodo),
+      });
+      const created = await res.json();
+      setTodos([...todos, created]);
     }
     setOpen(false);
     setEditing(null);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
+    await fetch(`${API_URL}/todos/${id}`, { method: 'DELETE' });
     setTodos(todos.filter(t => t.id !== id));
   };
 
