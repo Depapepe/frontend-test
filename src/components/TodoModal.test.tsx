@@ -1,6 +1,15 @@
 import { describe, it, expect, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import TodoModal from "./TodoModal";
+
+const baseTodo = {
+  title: "Test Todo",
+  detail: "Test Detail",
+  dueDate: "2025-12-31",
+  status: "TODO" as const,
+  checklist: [{ id: 1, text: "Item 1", done: false }],
+};
 
 describe("TodoModal", () => {
   it("renders correctly when open", () => {
@@ -14,19 +23,7 @@ describe("TodoModal", () => {
         open={true}
         onOpenChange={onOpenChangeMock}
         onSave={onSaveMock}
-        initialTodo={{
-          title: "Test Todo",
-          detail: "Test Detail",
-          dueDate: "2025-12-31",
-          status: "TODO",
-          checklist: [
-            {
-              id: 1,
-              text: "Item 1",
-              done: false,
-            },
-          ],
-        }}
+        initialTodo={baseTodo}
       />
     );
 
@@ -48,19 +45,7 @@ describe("TodoModal", () => {
         open={true}
         onOpenChange={onOpenChangeMock}
         onSave={onSaveMock}
-        initialTodo={{
-          title: "Test Todo",
-          detail: "Test Detail",
-          dueDate: "2025-12-31",
-          status: "TODO",
-          checklist: [
-            {
-              id: 1,
-              text: "Item 1",
-              done: false,
-            },
-          ],
-        }}
+        initialTodo={baseTodo}
       />
     );
 
@@ -93,7 +78,7 @@ describe("TodoModal", () => {
     expect(screen.queryByTestId("todo-modal")).not.toBeInTheDocument();
   });
 
-  it("closes when the overlay is clicked", () => {
+  it("closes when the overlay is clicked", async () => {
     // given
     const onOpenChangeMock = vi.fn();
     const onSaveMock = vi.fn();
@@ -103,34 +88,22 @@ describe("TodoModal", () => {
         open={true}
         onOpenChange={onOpenChangeMock}
         onSave={onSaveMock}
-        initialTodo={{
-          title: "Test Todo",
-          detail: "",
-          dueDate: "",
-          status: "TODO",
-          checklist: [],
-        }}
+        initialTodo={{ ...baseTodo, detail: "", dueDate: "", checklist: [] }}
       />
     );
 
     // when - 오버레이 클릭
-    screen.getByTestId("todo-modal-overlay").click();
+    await userEvent.click(screen.getByTestId("todo-modal-overlay"));
 
     // then - onOpenChange가 false로 호출되었는지 확인
     expect(onOpenChangeMock).toHaveBeenCalledWith(false);
   });
 
-  it("calls onSave with correct data when save button is clicked", () => {
+  it("calls onSave with correct data when save button is clicked", async () => {
     // given
     const onOpenChangeMock = vi.fn();
     const onSaveMock = vi.fn();
-    const initialTodo = {
-      title: "Test Todo",
-      detail: "Test Detail",
-      dueDate: "2025-07-24",
-      status: "TODO" as const,
-      checklist: [{ id: 1, text: "Item 1", done: false }],
-    };
+    const initialTodo = { ...baseTodo, dueDate: "2025-07-24" };
 
     render(
       <TodoModal
@@ -142,11 +115,12 @@ describe("TodoModal", () => {
     );
 
     // when - detail 수정, checkbox 클릭, Save 버튼 클릭
-    const detailInput = screen.getByTestId("todo-detail-input");
-    fireEvent.change(detailInput, { target: { value: "Updated Detail Text" } });
-    screen.getByTestId("todo-checklist-checkbox-1").click();
+    const detailInput = screen.getByTestId("todo-detail-input") as HTMLInputElement;
+    await userEvent.clear(detailInput);
+    await userEvent.type(detailInput, "Updated Detail Text");
+    await userEvent.click(screen.getByTestId("todo-checklist-checkbox-1"));
 
-    screen.getByTestId("todo-save-button").click();
+    await userEvent.click(screen.getByTestId("todo-save-button"));
 
     // then - onSave가 올바른 데이터와 함께 호출되었는지 확인
     expect(onSaveMock).toHaveBeenCalledTimes(1);
