@@ -2,10 +2,10 @@ import { describe, it, expect, vi } from "vitest";
 import {
   render,
   screen,
-  fireEvent,
   within,
   waitFor,
 } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Todos from "./Todos";
 import { server } from "../../mocks/server";
 
@@ -49,7 +49,7 @@ describe("Todos", () => {
     const listItem = await screen.findByTestId("todo-item-1");
 
     const deleteButton = within(listItem).getByTestId("delete-todo-1");
-    fireEvent.click(deleteButton);
+    await userEvent.click(deleteButton);
 
     // then
     // item dom 이 사라질 때까지 기다리기
